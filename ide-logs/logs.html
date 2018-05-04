@@ -28,7 +28,6 @@
 	<link rel="stylesheet" href="/services/v3/core/theme/bootstrap.min.css">
 	<script src="/services/v3/web/resources/bootstrap/3.3.7/bootstrap.min.js"></script>
 	
-	<script src="../ide/ui/message-hub.js"></script>
 	<script src="logs.js"></script>
 
 	<!-- Custom IDE Styles -->
@@ -38,19 +37,13 @@
 </head>
 
 <body ng-app="logs" ng-controller="LogsController as logs" class="view">
-	<form class="input-group" name="logsForm">
-	  	<span class="input-group-btn">
-			<button class="btn btn-default" type="button" ng-click="logs.refresh()"><i class="fa fa-refresh"></i></button>
-		</span>
-	  	<input type="text" name="logs" class="form-control"
-			ng-model="logs.logUrl"
-			ng-model-options="{ updateOn: 'blur' }"
-			ng-keyup="cancel($event)"
-			placeholder="Log ..."
-		>
-	  </form>
-	<div class="fluidMedia">
-	    <iframe ng-src="{{logs.logUrl}}" frameborder="0"> </iframe>
-	</div>
+
+	<form class="input-group col-lg-12" name="logsForm">
+		<div class="col-lg-12 position-sticky sticky-top">
+			<select ng-model="selectedLog" ng-options="o as o for o in logsList" ng-change='logChanged()'
+					class="dropdown btn btn-default dropdown-toggle form-control" title="Logs"></select>
+		</div>
+		<pre class="form-control col-lg-12" style="height: 100%;">{{ logContent }}</pre>
+  	</form>
 </body>
 </html>

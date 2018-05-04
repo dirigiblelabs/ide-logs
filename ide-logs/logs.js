@@ -8,74 +8,22 @@
  * SAP - initial API and implementation
  */
 
-angular.module('preview', [])
-.factory('$messageHub', [function(){
-	var messageHub = new FramesMessageHub();	
-	var message = function(evtName, data){
-		messageHub.post({data: data}, 'workspace.' + evtName);
-	};
-	var on = function(topic, callback){
-		messageHub.subscribe(callback, topic);
-	};
-	return {
-		message: message,
-		on: on
-	};
-}])
-.controller('PreviewController', ['$scope', '$messageHub', function ($scope, $messageHub) {
+angular.module('logs', [])
+.controller('LogsController', ['$scope', '$http', function ($scope, $http) {
 
-	this.refresh = function() {
-		var url = this.previewUrl;
-		if (url) {
-			url = url.indexOf('?refreshToken') > 0 ? url.substring(0, url.indexOf('?refreshToken')) : url;
-			this.previewUrl = url + '?refreshToken=' + new Date().getTime();
-		}
-	};
-
-	$messageHub.on('workspace.file.selected', function(msg) {
-		var resourcePath = msg.data.path.substring(msg.data.path.indexOf('/', 1));
-		var url = window.top.location.protocol + '//' + window.top.location.host + '/services/v3';
-		var type = resourcePath.substring(resourcePath.lastIndexOf('.') + 1);
-		switch(type) {
-			case 'rhino':
-				url += '/rhino';
-				break;
-			case 'nashorn':
-				url += '/nashorn';
-				break;
-			case 'v8':
-				url += 'v8';
-				break;
-			case 'js':
-				url += '/js';
-				break;
-			case 'md':
-				url += '/wiki';
-				break;
-			case 'edm':
-				return;
-			case 'dsm':
-				return;
-			case 'bpmn':
-				return;
-			default:
-				url += '/web';
-		}
-		url += resourcePath;
-		this.previewUrl = url;
-		$scope.$apply();
-	}.bind(this));
+	$scope.selectedLog = null;
+	$http.get('/services/v3/ops/logs').then(function(response) {
+		$scope.logsList = response.data;
+	});
 	
-	$messageHub.on('workspace.file.published', function(msg) {
-		this.refresh();
-		$scope.$apply();
-	}.bind(this));
-
-	$scope.cancel = function(e) {
-		if (e.keyCode === 27) {
-			$scope.previewForm.preview.$rollbackViewValue();
+	$scope.logChanged = function() {
+		if ($scope.selectedLog) {
+			$http.get('/services/v3/ops/logs/' + $scope.selectedLog).then(function(response) {
+				$scope.logContent = response.data;
+			});	
 		}
-	};
+	}
+
 
 }]).config(function($sceProvider) {
     $sceProvider.enabled(false);
