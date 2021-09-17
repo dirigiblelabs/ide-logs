@@ -8,14 +8,13 @@
  * Contributors:
  *   SAP - initial API and implementation
  */
-exports.getView = function() {
-	var view = {
-			"id":"logconfig",
-			"name":"LogConfig",
-			"factory":"frame",
-			"region":"center-bottom",
-			"label":"Log Config",
-			"link":"../ide-logs/log-config.html"
+exports.getView = function () {
+	return {
+		"id": "logconfig",
+		"name": "LogConfig",
+		"factory": "frame",
+		"region": "center-bottom",
+		"label": "Log Config",
+		"link": "../ide-logs/log-config.html"
 	};
-	return view;
 }

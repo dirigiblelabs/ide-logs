@@ -8,14 +8,13 @@
  * Contributors:
  *   SAP - initial API and implementation
  */
-exports.getView = function() {
-	var view = {
-			"id":"logs",
-			"name":"Logs",
-			"factory":"frame",
-			"region":"center-bottom",
-			"label":"Logs",
-			"link":"../ide-logs/logs.html"
+exports.getView = function () {
+	return {
+		"id": "logs",
+		"name": "Logs",
+		"factory": "frame",
+		"region": "center-bottom",
+		"label": "Logs",
+		"link": "../ide-logs/logs.html"
 	};
-	return view;
 }
