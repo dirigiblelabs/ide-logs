@@ -30,6 +30,4 @@ angular.module('logs', [])
 			}
 		}
 
-	}]).config(function ($sceProvider) {
-		$sceProvider.enabled(false);
-	});
+	}]);
